@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nagrani — Journey to the Secret Kingdom</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #05040f;
+    --panel: #100d27;
+    --purple: #7d4cff;
+    --purple-light: #b477ff;
+    --pink: #ff5fcf;
+    --cyan: #5de1ff;
+    --gold: #ffd76a;
+    --green: #22dc91;
+    --white: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #29134f 0%,
+            #100b27 35%,
+            #05040f 75%
+        );
+
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   STAR BACKGROUND
+========================================================= */
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background-image:
+        radial-gradient(circle, white 1px, transparent 1px),
+        radial-gradient(circle, #7bdfff 1px, transparent 1px);
+
+    background-size:
+        90px 90px,
+        140px 140px;
+
+    background-position:
+        10px 20px,
+        40px 70px;
+
+    opacity: 0.25;
+
+    animation: starsMove 20s linear infinite;
+}
+
+body::after {
+    background-size: 180px 180px;
+    opacity: 0.12;
+    animation-duration: 35s;
+}
+
+@keyframes starsMove {
+
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(-120px, 100px);
+    }
+
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    position: relative;
+    z-index: 5;
+
+    text-align: center;
+
+    padding:
+        25px
+        20px
+        15px;
+}
+
+.title {
+
+    font-family: Georgia, serif;
+
+    font-size:
+        clamp(26px, 4vw, 52px);
+
+    color: var(--gold);
+
+    margin: 0;
+
+    text-shadow:
+        0 0 10px #ffca4d66,
+        0 0 30px #ffca4d44;
+
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+
+    from {
+        text-shadow:
+            0 0 10px #ffca4d44;
+    }
+
+    to {
+        text-shadow:
+            0 0 25px #ffd15f99,
+            0 0 50px #ff8a2d44;
+    }
+
+}
+
+.subtitle {
+
+    margin-top: 10px;
+
+    color: #d9d6e8;
+
+    font-size:
+        clamp(14px, 2vw, 19px);
+}
+
+/* =========================================================
+   TOP BUTTONS
+========================================================= */
+
+.top-controls {
+
+    position: relative;
+    z-index: 5;
+
+    max-width: 1150px;
+
+    margin:
+        0 auto
+        15px;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+button {
+
+    border: 1px solid #7045d8;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1a123c,
+            #100b2a
+        );
+
+    color: white;
+
+    padding:
+        12px 18px;
+
+    border-radius: 14px;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        box-shadow .2s,
+        background .2s;
+}
+
+button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 25px #8b5cff66;
+
+}
+
+button:active {
+
+    transform: scale(.97);
+
+}
+
+.primary {
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a86a,
+            #21dc8d
+        );
+
+    border-color: #43f2aa;
+
+    color: #03160d;
+
+    min-width: 190px;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(1150px, 94%);
+
+    margin: auto;
+}
+
+/* =========================================================
+   SCENES
+========================================================= */
+
+.scene {
+
+    display: none;
+
+    min-height: 540px;
+
+    border:
+        1px solid #663cc1;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    background:
+        rgba(13, 10, 34, .88);
+
+    box-shadow:
+        0 0 60px #6035c833,
+        inset 0 0 30px #8d5cff0c;
+}
+
+.scene.active {
+
+    display: flex;
+
+    animation:
+        sceneEnter .65s ease;
+}
+
+@keyframes sceneEnter {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            scale(.97)
+            translateY(15px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+
+    }
+
+}
+
+/* =========================================================
+   ART AREA
+========================================================= */
+
+.art {
+
+    position: relative;
+
+    flex: 1.35;
+
+    min-height: 540px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #30205d,
+            #0b0920 70%
+        );
+}
+
+/* =========================================================
+   INFORMATION AREA
+========================================================= */
+
+.info {
+
+    flex: .8;
+
+    padding: 45px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0d0b22,
+            #140d2d
+        );
+}
+
+.scene-number {
+
+    display: grid;
+
+    place-items: center;
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8d54ff,
+            #5426c5
+        );
+
+    font-weight: 900;
+
+    font-size: 20px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 0 20px #8c54ff66;
+}
+
+.scene-title {
+
+    font-family: Georgia, serif;
+
+    font-size:
+        clamp(28px, 3vw, 44px);
+
+    color: var(--gold);
+
+    margin:
+        0 0 15px;
+}
+
+.scene-description {
+
+    font-size: 18px;
+
+    line-height: 1.7;
+
+    color: #d8d5e4;
+
+    margin: 0;
+}
+
+.dialogue {
+
+    margin-top: 22px;
+
+    font-size: 26px;
+
+    font-weight: bold;
+
+    color: white;
+
+    text-shadow:
+        0 0 20px #d467ff;
+}
+
+.call-counter {
+
+    display: inline-block;
+
+    width: fit-content;
+
+    margin-top: 15px;
+
+    padding:
+        8px 15px;
+
+    border:
+        1px solid #b75cff;
+
+    border-radius: 20px;
+
+    background:
+        #2a1450;
+
+    color: #e6b7ff;
+
+    font-weight: bold;
+}
+
+/* =========================================================
+   EARTH
+========================================================= */
+
+.earth {
+
+    position: absolute;
+
+    width: 370px;
+
+    height: 370px;
+
+    border-radius: 50%;
+
+    left: 8%;
+
+    bottom: -180px;
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            #8ae9ff,
+            #2185d1 38%,
+            #083c78 72%,
+            #021b3c
+        );
+
+    box-shadow:
+        0 0 60px #38cfff88;
+
+    overflow: hidden;
+}
+
+.earth::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 30px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            25deg,
+            transparent 20%,
+            #55bd63 22% 35%,
+            transparent 37% 50%,
+            #65cb69 52% 67%,
+            transparent 69%
+        );
+
+    opacity: .8;
+}
+
+/* =========================================================
+   SPACESHIP
+========================================================= */
+
+.ship {
+
+    position: absolute;
+
+    width: 190px;
+
+    height: 90px;
+
+    left: 43%;
+
+    top: 40%;
+
+    border-radius:
+        55%
+        55%
+        40%
+        40%;
+
+    background:
+        linear-gradient(
+            #f4f4f4,
+            #8b8b96
+        );
+
+    transform:
+        rotate(-8deg);
+
+    box-shadow:
+        0 0 30px #62dfff;
+
+    animation:
+        shipFloat 3s ease-in-out infinite;
+}
+
+.ship::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 75px;
+
+    height: 38px;
+
+    left: 57px;
+
+    top: 7px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            #4bd9ff,
+            #155d9b
+        );
+
+    border:
+        5px solid #aaa;
+
+}
+
+.ship::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: -60px;
+
+    top: 30px;
+
+    border-style: solid;
+
+    border-width:
+        15px
+        70px
+        15px
+        0;
+
+    border-color:
+        transparent
+        #54dfff
+        transparent
+        transparent;
+
+    filter:
+        drop-shadow(
+            0 0 15px #54dfff
+        );
+}
+
+@keyframes shipFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-8deg);
+    }
+
+    50% {
+        transform:
+            translateY(-12px)
+            rotate(-5deg);
+    }
+
+}
+
+/* =========================================================
+   KIDS
+========================================================= */
+
+.kid {
+
+    position: absolute;
+
+    width: 52px;
+
+    height: 72px;
+
+    bottom: 35%;
+
+    border-radius:
+        45%
+        45%
+        20%
+        20%;
+
+    z-index: 5;
+}
+
+.kid::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 45px;
+
+    height: 45px;
+
+    left: 4px;
+
+    top: -34px;
+
+    border-radius: 50%;
+
+    background:
+        #d99672;
+
+    box-shadow:
+        0 -9px 0 3px #25202c;
+}
+
+.boy {
+
+    left: 43%;
+
+    background:
+        #2876dc;
+}
+
+.girl {
+
+    left: 52%;
+
+    background:
+        #e84c98;
+}
+
+/* =========================================================
+   PLANETS
+========================================================= */
+
+.planet {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    width: 90px;
+
+    height: 90px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ed9b70,
+            #7c3041
+        );
+
+    box-shadow:
+        0 0 30px #ff755566;
+}
+
+.planet-one {
+
+    right: 12%;
+
+    top: 20%;
+}
+
+.planet-two {
+
+    left: 10%;
+
+    top: 12%;
+
+    width: 55px;
+
+    height: 55px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #b19cff,
+            #5435a8
+        );
+}
+
+/* =========================================================
+   MAGIC PORTAL
+========================================================= */
+
+.magic-ring {
+
+    position: absolute;
+
+    width: 300px;
+
+    height: 300px;
+
+    left: 22%;
+
+    top: 20%;
+
+    border:
+        18px solid #bd67ff;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 45px #bd67ff,
+        inset 0 0 45px #53dfff;
+
+    animation:
+        portalSpin 7s linear infinite;
+}
+
+@keyframes portalSpin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+/* =========================================================
+   MAGICAL VEHICLE
+========================================================= */
+
+.vehicle {
+
+    position: absolute;
+
+    width: 240px;
+
+    height: 90px;
+
+    left: 30%;
+
+    top: 43%;
+
+    border-radius:
+        60%
+        50%
+        30%
+        30%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f6ce58,
+            #9b4d20
+        );
+
+    box-shadow:
+        0 0 45px #ffd45b;
+
+    transform:
+        rotate(-5deg);
+}
+
+.vehicle::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 95px;
+
+    height: 45px;
+
+    background:
+        #70dcff;
+
+    border:
+        4px solid #ffd76b;
+
+    border-radius: 60%;
+
+    left: 72px;
+
+    top: -25px;
+}
+
+.vehicle::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 50%;
+
+    background:
+        #65eaff;
+
+    left: 30px;
+
+    bottom: -14px;
+
+    box-shadow:
+        150px 0 #65eaff;
+}
+
+/* =========================================================
+   SUN
+========================================================= */
+
+.sun {
+
+    position: absolute;
+
+    width: 350px;
+
+    height: 350px;
+
+    border-radius: 50%;
+
+    right: -100px;
+
+    top: 18%;
+
+    background:
+        radial-gradient(
+            circle,
+            #fffdd4 0 5%,
+            #ffd22d 18%,
+            #ff721a 55%,
+            #8b1c12
+        );
+
+    box-shadow:
+        0 0 90px 30px #ff7b2299,
+        0 0 180px #ffbb3380;
+}
+
+/* =========================================================
+   SECRET KINGDOM
+========================================================= */
+
+.castle {
+
+    position: absolute;
+
+    left: 8%;
+
+    bottom: 0;
+
+    width: 84%;
+
+    height: 78%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #73439a,
+            #28205d
+        );
+
+    clip-path:
+        polygon(
+            0 100%,
+            7% 48%,
+            18% 58%,
+            25% 28%,
+            34% 52%,
+            43% 15%,
+            50% 48%,
+            60% 25%,
+            69% 52%,
+            79% 18%,
+            88% 50%,
+            100% 38%,
+            100% 100%
+        );
+
+    filter:
+        drop-shadow(
+            0 0 30px #ad7cff
+        );
+}
+
+/* =========================================================
+   GEM
+========================================================= */
+
+.gem {
+
+    position: absolute;
+
+    width: 110px;
+
+    height: 135px;
+
+    left: 43%;
+
+    top: 34%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff,
+            #d75cff 30%,
+            #6316c9
+        );
+
+    clip-path:
+        polygon(
+            50% 0,
+            100% 28%,
+            76% 100%,
+            24% 100%,
+            0 28%
+        );
+
+    box-shadow:
+        0 0 80px #d25cff;
+
+    animation:
+        gemPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes gemPulse {
+
+    from {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    to {
+        filter: brightness(1.8);
+        transform: scale(1.08);
+    }
+
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.home-sun {
+
+    position: absolute;
+
+    width: 150px;
+
+    height: 150px;
+
+    border-radius: 50%;
+
+    right: 15%;
+
+    top: 17%;
+
+    background:
+        #ffd76a;
+
+    box-shadow:
+        0 0 70px #ffc85b;
+}
+
+.hills {
+
+    position: absolute;
+
+    width: 100%;
+
+    height: 40%;
+
+    bottom: 0;
+
+    background:
+        linear-gradient(
+            170deg,
+            #174c35,
+            #061c17
+        );
+
+    clip-path:
+        polygon(
+            0 55%,
+            18% 25%,
+            34% 55%,
+            53% 15%,
+            72% 52%,
+            86% 28%,
+            100% 52%,
+            100% 100%,
+            0 100%
+        );
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+
+    margin:
+        18px 0;
+}
+
+.progress-bar {
+
+    height: 7px;
+
+    background:
+        #25203f;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    max-width: 700px;
+
+    margin:
+        0 auto
+        12px;
+}
+
+.progress-fill {
+
+    height: 100%;
+
+    width: 8.33%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #a452ff,
+            #2ce19a
+        );
+
+    transition:
+        width .5s ease;
+}
+
+/* =========================================================
+   NUMBERED PROGRESS
+========================================================= */
+
+.progress {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    padding: 13px;
+
+    border:
+        1px solid #4f348d;
+
+    border-radius: 18px;
+
+    background:
+        #0e0b22dd;
+}
+
+.progress-dot {
+
+    width: 32px;
+
+    height: 32px;
+
+    border-radius: 50%;
+
+    display: grid;
+
+    place-items: center;
+
+    background:
+        #262146;
+
+    color:
+        #aaa;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.progress-dot:hover {
+
+    transform: scale(1.1);
+
+}
+
+.progress-dot.active {
+
+    background:
+        #21d889;
+
+    color:
+        #001b0d;
+
+    box-shadow:
+        0 0 18px #21d88988;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+
+    text-align: center;
+
+    color: #aaa;
+
+    padding:
+        15px 0
+        25px;
+}
+
+.footer strong {
+
+    color:
+        var(--gold);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width: 760px) {
+
+    .scene.active {
+        flex-direction: column;
+    }
+
+    .art {
+        min-height: 360px;
+    }
+
+    .info {
+        padding: 28px;
+    }
+
+    .ship {
+        left: 35%;
+        transform: scale(.75) rotate(-8deg);
+    }
+
+    .kid {
+        transform: scale(.8);
+    }
+
+    .earth {
+        width: 280px;
+        height: 280px;
+    }
+
+    .magic-ring {
+        width: 230px;
+        height: 230px;
+    }
+
+    .sun {
+        width: 260px;
+        height: 260px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header>
+
+    <div class="top-controls">
+
+        <button id="soundButton">
+            ♫ Sound: ON
+        </button>
+
+        <button id="helpButton">
+            How to Play ❔
+        </button>
+
+    </div>
+
+    <h1 class="title">
+        ✦ NAGRANI: JOURNEY TO THE SECRET KINGDOM ✦
+    </h1>
+
+    <div class="subtitle">
+        An Interactive Cinematic Web Simulation
+    </div>
+
+</header>
+
+
+<main>
+
+
+<!-- =======================================================
+     SCENE 1
+======================================================= -->
+
+<section class="scene active">
+
+    <div class="art">
+
+        <div class="earth"></div>
+
+        <div class="ship"></div>
+
+        <div
+            class="kid boy"
+            style="bottom:35%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="bottom:35%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            1
+        </div>
+
+        <h2 class="scene-title">
+            Enter the Spaceship
+        </h2>
+
+        <p class="scene-description">
+
+            Two adventurous kids step into their mysterious
+            spaceship, ready to leave Earth and discover
+            what lies beyond the stars.
+
+        </p>
+
+        <div class="dialogue">
+            “Ready?” — “Ready!”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 2
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="earth"></div>
+
+        <div
+            class="ship"
+            style="
+                top:28%;
+                transform:scale(1.1) rotate(-18deg);
+            ">
+        </div>
+
+        <div
+            class="kid boy"
+            style="left:48%;bottom:35%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="left:56%;bottom:35%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            2
+        </div>
+
+        <h2 class="scene-title">
+            Blast Off!
+        </h2>
+
+        <p class="scene-description">
+
+            Engines roar.
+
+            The spaceship rises above the clouds,
+            escapes Earth's atmosphere and begins
+            its incredible journey into space.
+
+        </p>
+
+        <div class="dialogue">
+            🚀 3… 2… 1… BLAST OFF!
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 3
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="planet planet-one"></div>
+
+        <div class="planet planet-two"></div>
+
+        <div
+            class="ship"
+            style="top:50%;">
+        </div>
+
+        <div
+            class="kid boy"
+            style="left:46%;bottom:38%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="left:53%;bottom:38%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            3
+        </div>
+
+        <h2 class="scene-title">
+            Into Deep Space
+        </h2>
+
+        <p class="scene-description">
+
+            Stars surround them.
+
+            Strange planets drift past the windows
+            as their journey becomes more mysterious.
+
+        </p>
+
+        <div class="dialogue">
+            “Where are we going?”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 4
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="magic-ring"></div>
+
+        <div
+            class="kid boy"
+            style="left:42%;bottom:28%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="left:52%;bottom:28%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            4
+        </div>
+
+        <h2 class="scene-title">
+            Call Nagrani
+        </h2>
+
+        <p class="scene-description">
+
+            They close their eyes and hold hands.
+
+            An ancient secret says that the guardian
+            can hear only a sincere call.
+
+        </p>
+
+        <div class="dialogue">
+            “NAGRANI!”
+        </div>
+
+        <span class="call-counter">
+            Call 1 of 3
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 5
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div
+            class="magic-ring"
+            style="
+                left:28%;
+                top:15%;
+            ">
+        </div>
+
+        <div
+            class="kid boy"
+            style="left:42%;bottom:28%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="left:52%;bottom:28%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            5
+        </div>
+
+        <h2 class="scene-title">
+            Call Nagrani Again
+        </h2>
+
+        <p class="scene-description">
+
+            The spaceship becomes completely silent.
+
+            Even the stars seem to pause as they make
+            the second call.
+
+        </p>
+
+        <div class="dialogue">
+            “NAGRANI!”
+        </div>
+
+        <span class="call-counter">
+            Call 2 of 3
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 6
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div
+            class="magic-ring"
+            style="
+                left:26%;
+                top:10%;
+                box-shadow:
+                    0 0 70px #ffcf66,
+                    inset 0 0 60px #ff66d8;
+            ">
+        </div>
+
+        <div
+            class="kid boy"
+            style="left:42%;bottom:28%;">
+        </div>
+
+        <div
+            class="kid girl"
+            style="left:52%;bottom:28%;">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            6
+        </div>
+
+        <h2 class="scene-title">
+            The Third Call
+        </h2>
+
+        <p class="scene-description">
+
+            With courage in their hearts,
+            they make one final call.
+
+            Something enormous answers from
+            beyond the stars.
+
+        </p>
+
+        <div class="dialogue">
+            “NAGRANI!”
+        </div>
+
+        <span class="call-counter">
+            Call 3 of 3
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 7
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div
+            class="magic-ring"
+            style="
+                left:16%;
+                top:17%;
+            ">
+        </div>
+
+        <div class="vehicle"></div>
+
+        <div
+            class="kid boy"
+            style="
+                left:48%;
+                top:47%;
+            ">
+        </div>
+
+        <div
+            class="kid girl"
+            style="
+                left:55%;
+                top:47%;
+            ">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            7
+        </div>
+
+        <h2 class="scene-title">
+            The Magical Vehicle Appears
+        </h2>
+
+        <p class="scene-description">
+
+            A golden vehicle emerges from
+            a swirling portal.
+
+            Strange glowing symbols cover
+            its magical body.
+
+        </p>
+
+        <div class="dialogue">
+            ✨ “Come with me.”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 8
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="sun"></div>
+
+        <div
+            class="vehicle"
+            style="
+                left:28%;
+                top:46%;
+                transform:
+                    rotate(-12deg)
+                    scale(.85);
+            ">
+        </div>
+
+        <div
+            class="kid boy"
+            style="
+                left:43%;
+                top:51%;
+            ">
+        </div>
+
+        <div
+            class="kid girl"
+            style="
+                left:50%;
+                top:51%;
+            ">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            8
+        </div>
+
+        <h2 class="scene-title">
+            Towards the Sun
+        </h2>
+
+        <p class="scene-description">
+
+            The magical vehicle carries them
+            closer and closer to the Sun.
+
+            But instead of burning,
+            a secret gateway opens.
+
+        </p>
+
+        <div class="dialogue">
+            ☀️ A secret world awaits…
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 9
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div
+            class="sun"
+            style="
+                width:210px;
+                height:210px;
+                right:-50px;
+            ">
+        </div>
+
+        <div class="castle"></div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            9
+        </div>
+
+        <h2 class="scene-title">
+            The Secret Kingdom
+        </h2>
+
+        <p class="scene-description">
+
+            Beyond the solar gateway lies a
+            breathtaking kingdom floating in
+            golden light.
+
+            A world hidden from ordinary eyes.
+
+        </p>
+
+        <div class="dialogue">
+            “We actually found it!”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 10
+======================================================= -->
+
+<section class="scene">
+
+    <div
+        class="art"
+        style="
+            background:
+            radial-gradient(
+                circle,
+                #43206e,
+                #100b22 65%
+            );
+        "
+    >
+
+        <div class="gem"></div>
+
+        <div
+            class="kid boy"
+            style="
+                left:38%;
+                bottom:25%;
+            ">
+        </div>
+
+        <div
+            class="kid girl"
+            style="
+                left:55%;
+                bottom:25%;
+            ">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            10
+        </div>
+
+        <h2 class="scene-title">
+            The Special Gem
+        </h2>
+
+        <p class="scene-description">
+
+            Deep inside the kingdom,
+            they discover a crystal gem.
+
+            It glows with mysterious magical
+            energy unlike anything they have
+            ever seen.
+
+        </p>
+
+        <div class="dialogue">
+            💎 “This is what Nagrani protected.”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 11
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="earth"></div>
+
+        <div
+            class="ship"
+            style="
+                left:42%;
+                top:25%;
+                transform:rotate(15deg);
+            ">
+        </div>
+
+        <div
+            class="gem"
+            style="
+                width:50px;
+                height:62px;
+                left:53%;
+                top:31%;
+            ">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            11
+        </div>
+
+        <h2 class="scene-title">
+            Return to Earth
+        </h2>
+
+        <p class="scene-description">
+
+            They thank the guardian,
+            return to their spaceship,
+            and begin the long journey home.
+
+            The special gem is safely with them.
+
+        </p>
+
+        <div class="dialogue">
+            🌍 “Home… here we come.”
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SCENE 12
+======================================================= -->
+
+<section class="scene">
+
+    <div class="art">
+
+        <div class="home-sun"></div>
+
+        <div class="hills"></div>
+
+        <div
+            class="kid boy"
+            style="
+                left:44%;
+                bottom:30%;
+            ">
+        </div>
+
+        <div
+            class="kid girl"
+            style="
+                left:53%;
+                bottom:30%;
+            ">
+        </div>
+
+    </div>
+
+
+    <div class="info">
+
+        <div class="scene-number">
+            12
+        </div>
+
+        <h2 class="scene-title">
+            Back Home
+        </h2>
+
+        <p class="scene-description">
+
+            They land safely.
+
+            The adventure is over—but the glowing
+            gem reminds them that some mysteries
+            are meant to be discovered.
+
+        </p>
+
+        <div class="dialogue">
+            ❤️ Adventure Completed!
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CONTROLS
+======================================================= -->
+
+<div class="controls">
+
+    <button id="previousButton">
+        ◀ Previous Scene
+    </button>
+
+    <button
+        id="nextButton"
+        class="primary">
+        ▶ Play / Next Scene
+    </button>
+
+    <button id="restartButton">
+        ↻ Restart Simulation
+    </button>
+
+</div>
+
+
+<!-- =======================================================
+     PROGRESS BAR
+======================================================= -->
+
+<div class="progress-bar">
+
+    <div
+        id="progressFill"
+        class="progress-fill">
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     SCENE NUMBERS
+======================================================= -->
+
+<div
+    id="progress"
+    class="progress">
+</div>
+
+
+<div class="footer">
+
+    ✨
+
+    <strong>
+        Believe in magic. Call with hope. Miracles happen.
+    </strong>
+
+    ✨
+
+</div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   GET ELEMENTS
+========================================================= */
+
+const scenes =
+    document.querySelectorAll(".scene");
+
+const progress =
+    document.getElementById("progress");
+
+const progressFill =
+    document.getElementById("progressFill");
+
+const nextButton =
+    document.getElementById("nextButton");
+
+const previousButton =
+    document.getElementById("previousButton");
+
+const restartButton =
+    document.getElementById("restartButton");
+
+const soundButton =
+    document.getElementById("soundButton");
+
+const helpButton =
+    document.getElementById("helpButton");
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let currentScene = 0;
+
+let soundEnabled = true;
+
+
+/* =========================================================
+   CREATE NUMBERED PROGRESS BUTTONS
+========================================================= */
+
+scenes.forEach((scene, index) => {
+
+    const dot =
+        document.createElement("div");
+
+    dot.className =
+        "progress-dot";
+
+    dot.textContent =
+        index + 1;
+
+    dot.addEventListener(
+        "click",
+        () => {
+
+            showScene(index);
+
+        }
+    );
+
+    progress.appendChild(dot);
+
+});
+
+
+/* =========================================================
+   SHOW SCENE
+========================================================= */
+
+function showScene(index) {
+
+    if (index < 0) {
+
+        index = 0;
+
+    }
+
+    if (index >= scenes.length) {
+
+        index = scenes.length - 1;
+
+    }
+
+    currentScene = index;
+
+
+    /* Hide all scenes */
+
+    scenes.forEach(
+        (scene, i) => {
+
+            scene.classList.toggle(
+                "active",
+                i === currentScene
+            );
+
+        }
+    );
+
+
+    /* Update numbered buttons */
+
+    const dots =
+        document.querySelectorAll(
+            ".progress-dot"
+        );
+
+    dots.forEach(
+        (dot, i) => {
+
+            dot.classList.toggle(
+                "active",
+                i === currentScene
+            );
+
+        }
+    );
+
+
+    /* Update progress */
+
+    const percentage =
+        ((currentScene + 1) /
+            scenes.length) * 100;
+
+    progressFill.style.width =
+        percentage + "%";
+
+
+    /* Update next button */
+
+    if (
+        currentScene ===
+        scenes.length - 1
+    ) {
+
+        nextButton.innerHTML =
+            "✓ Adventure Complete";
+
+    } else {
+
+        nextButton.innerHTML =
+            "▶ Play / Next Scene";
+
+    }
+
+
+    /* Small sound effect */
+
+    if (soundEnabled) {
+
+        playClickSound();
+
+    }
+
+}
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+function nextScene() {
+
+    if (
+        currentScene <
+        scenes.length - 1
+    ) {
+
+        showScene(
+            currentScene + 1
+        );
+
+    } else {
+
+        /*
+            When the story is complete,
+            pressing next starts it again.
+        */
+
+        showScene(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVIOUS
+========================================================= */
+
+function previousScene() {
+
+    if (currentScene > 0) {
+
+        showScene(
+            currentScene - 1
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartSimulation() {
+
+    showScene(0);
+
+}
+
+
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+nextButton.addEventListener(
+    "click",
+    nextScene
+);
+
+previousButton.addEventListener(
+    "click",
+    previousScene
+);
+
+restartButton.addEventListener(
+    "click",
+    restartSimulation
+);
+
+
+/* =========================================================
+   SOUND TOGGLE
+========================================================= */
+
+soundButton.addEventListener(
+    "click",
+    () => {
+
+        soundEnabled =
+            !soundEnabled;
+
+        if (soundEnabled) {
+
+            soundButton.innerHTML =
+                "♫ Sound: ON";
+
+        } else {
+
+            soundButton.innerHTML =
+                "♫ Sound: OFF";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+helpButton.addEventListener(
+    "click",
+    () => {
+
+        alert(
+`HOW TO PLAY
+
+🚀 Click "Play / Next Scene"
+to move through the adventure.
+
+◀ Previous Scene
+goes back one scene.
+
+🔢 Click any numbered circle
+to jump directly to a scene.
+
+🔄 Restart
+starts the adventure from the beginning.
+
+The story contains three magical calls:
+
+NAGRANI!
+NAGRANI!
+NAGRANI!
+
+After the third call,
+the magical vehicle appears.
+
+Keyboard controls:
+
+→  Next scene
+←  Previous scene
+Space  Next scene
+R  Restart`
+        );
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD CONTROLS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "ArrowRight" ||
+            event.key === " "
+        ) {
+
+            event.preventDefault();
+
+            nextScene();
+
+        }
+
+
+        if (
+            event.key === "ArrowLeft"
+        ) {
+
+            previousScene();
+
+        }
+
+
+        if (
+            event.key.toLowerCase() === "r"
+        ) {
+
+            restartSimulation();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SIMPLE WEB AUDIO CLICK
+========================================================= */
+
+let audioContext = null;
+
+function playClickSound() {
+
+    try {
+
+        if (!soundEnabled) {
+            return;
+        }
+
+        if (!audioContext) {
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.type =
+            "sine";
+
+        oscillator.frequency.value =
+            500;
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.04,
+            audioContext.currentTime + 0.01
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + 0.12
+        );
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.12
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Audio unavailable"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+showScene(0);
+
+</script>
+
+</body>
+</html>
